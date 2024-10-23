@@ -5,4 +5,6 @@ Our tasks contains creating a datastreaming pipeline to add new data to the data
 Data Batch:\
 Datalake: Hà\
 Data Warehouse: Kiên\
-My task contains batch processing (writing from Datalake to Data Warehouse) and Data validation using Great Expectation
+My task contains batch processing (writing from Datalake to Data Warehouse) and Data validation using Great Expectation\
+
+Link report: https://docs.google.com/document/d/1tgOSFVxPbTe6VVv3KJAw8KcMDtaScHIMLvDFwlwrHSM/edit?usp=sharing
