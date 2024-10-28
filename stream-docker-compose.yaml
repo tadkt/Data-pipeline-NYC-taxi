@@ -6,9 +6,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: docker
-      POSTGRES_PASSWORD: docker
-      POSTGRES_DB: exampledb
+      POSTGRES_USER: datasci
+      POSTGRES_PASSWORD: datasci
+      POSTGRES_DB: datasci
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
