@@ -1,15 +1,5 @@
-version: "3.8"
-services:
-  # PostgreSQL service
-  postgres:
-    image: debezium/postgres:13
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: datasci
-      POSTGRES_PASSWORD: datasci
-      POSTGRES_DB: datasci
 
+services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: streaming-zookeeper
@@ -23,6 +13,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+
 
   broker:
     image: confluentinc/cp-server:7.5.0
@@ -40,20 +31,29 @@ services:
       timeout: 10s
       retries: 10
     environment:
-      KAFKA_BROKER_ID: 1
+      # ID of the broker in a cluster
+      KAFKA_BROKER_ID:
+        1
+        # Connect to Zoo Keeper for distributed coordination and leader election
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      # Define how clients connect to brokers
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      # How many copies are maintained for fault tolerance
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # Schema Registry URL for storing and managing Avro schemas
       KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # Confluent Metrics Reporter for Control Center Cluster Monitoring
       KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "broker:9092"
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: "true"
+      # For fixing the bug replication factor 3 > the number of node
       KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
+  # For managing Avro schemas
   schema-registry:
     image: confluentinc/cp-schema-registry:7.5.0
     container_name: streaming-schema-registry
@@ -77,18 +77,22 @@ services:
     depends_on:
       - broker
       - schema-registry
+      - debezium
     ports:
       - "9021:9021"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9021/healthcheck"]
+      test: ["CMD", "curl", "-f", "http://localhost:9021/healthcheck"] 
       interval: 30s
       timeout: 10s
       retries: 3
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: "broker:29092"
+      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: "debezium:8083"
       CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
       CONTROL_CENTER_REPLICATION_FACTOR: 1
       CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+      CONTROL_CENTER_CONNECT_HEALTHCHECK_ENDPOINT: "/connectors"
+      CONFLUENT_METRICS_TOPIC_REPLICATION: 1
 
   debezium:
     image: debezium/connect:1.9
@@ -97,6 +101,8 @@ services:
       broker:
         condition: service_healthy
       schema-registry:
+        condition: service_healthy
+      zookeeper:
         condition: service_healthy
     healthcheck:
       test:
@@ -120,8 +126,8 @@ services:
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: connect_configs
       OFFSET_STORAGE_TOPIC: connect_offsets
-      KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
-      VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_TOPIC_CREATION_ENABLE: true
