@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 version: "3.8"
 services:
   # PostgreSQL service
@@ -10,6 +11,10 @@ services:
       POSTGRES_PASSWORD: datasci
       POSTGRES_DB: datasci
 
+=======
+
+services:
+>>>>>>> e5b377ac9b315909a8a52b46f9e952811ba46644
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: streaming-zookeeper
@@ -24,6 +29,10 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e5b377ac9b315909a8a52b46f9e952811ba46644
   broker:
     image: confluentinc/cp-server:7.5.0
     container_name: streaming-broker
@@ -40,20 +49,44 @@ services:
       timeout: 10s
       retries: 10
     environment:
+<<<<<<< HEAD
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+=======
+      # ID of the broker in a cluster
+      KAFKA_BROKER_ID:
+        1
+        # Connect to Zoo Keeper for distributed coordination and leader election
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      # Define how clients connect to brokers
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      # How many copies are maintained for fault tolerance
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # Schema Registry URL for storing and managing Avro schemas
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      # Confluent Metrics Reporter for Control Center Cluster Monitoring
+>>>>>>> e5b377ac9b315909a8a52b46f9e952811ba46644
       KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "broker:9092"
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: "true"
+<<<<<<< HEAD
+=======
+      # For fixing the bug replication factor 3 > the number of node
+>>>>>>> e5b377ac9b315909a8a52b46f9e952811ba46644
       KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
+<<<<<<< HEAD
+=======
+  # For managing Avro schemas
+>>>>>>> e5b377ac9b315909a8a52b46f9e952811ba46644
   schema-registry:
     image: confluentinc/cp-schema-registry:7.5.0
     container_name: streaming-schema-registry
@@ -77,18 +110,35 @@ services:
     depends_on:
       - broker
       - schema-registry
+<<<<<<< HEAD
     ports:
       - "9021:9021"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9021/healthcheck"]
+=======
+      - debezium
+    ports:
+      - "9021:9021"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9021/healthcheck"] 
+>>>>>>> e5b377ac9b315909a8a52b46f9e952811ba46644
       interval: 30s
       timeout: 10s
       retries: 3
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: "broker:29092"
+<<<<<<< HEAD
       CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
       CONTROL_CENTER_REPLICATION_FACTOR: 1
       CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+=======
+      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: "debezium:8083"
+      CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+      CONTROL_CENTER_CONNECT_HEALTHCHECK_ENDPOINT: "/connectors"
+      CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+>>>>>>> e5b377ac9b315909a8a52b46f9e952811ba46644
 
   debezium:
     image: debezium/connect:1.9
@@ -98,6 +148,11 @@ services:
         condition: service_healthy
       schema-registry:
         condition: service_healthy
+<<<<<<< HEAD
+=======
+      zookeeper:
+        condition: service_healthy
+>>>>>>> e5b377ac9b315909a8a52b46f9e952811ba46644
     healthcheck:
       test:
         [
@@ -120,8 +175,13 @@ services:
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: connect_configs
       OFFSET_STORAGE_TOPIC: connect_offsets
+<<<<<<< HEAD
       KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
       VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+=======
+      KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+>>>>>>> e5b377ac9b315909a8a52b46f9e952811ba46644
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_TOPIC_CREATION_ENABLE: true

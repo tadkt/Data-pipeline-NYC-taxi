@@ -11,7 +11,7 @@ from scripts.convert_to_delta import delta_convert
 
 # Default arguments for the DAG
 default_args = {
-    "owner": "t.nhatnguyen",
+    "owner": "hanguyen",
     "email_on_failure": False,
     "email_on_retry": False,
     "email": "admin@localhost.com",
