@@ -14,4 +14,4 @@ Datalake: Hà
 Data Warehouse: Kiên
 - My task contains batch processing (writing from Datalake to Data Warehouse) and Data validation using Great Expectation
 
-Link report: https://docs.google.com/document/d/1tgOSFVxPbTe6VVv3KJAw8KcMDtaScHIMLvDFwlwrHSM/edit?usp=sharing
+Link report:https://docs.google.com/document/d/1x_OtN-g_M4uhVbFck3hIFCr4fa2ndIRzgw0WtD4yFFg/edit?tab=t.0#heading=h.xv8dmjsbqpy0
