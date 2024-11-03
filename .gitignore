@@ -7,3 +7,4 @@ test.py
 /airflow/logs/*
 
 FDS/
+.DS_Store/
