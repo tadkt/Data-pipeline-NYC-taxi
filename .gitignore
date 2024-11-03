@@ -5,3 +5,5 @@
 **/logs/
 test.py
 /airflow/logs/*
+
+FDS/
