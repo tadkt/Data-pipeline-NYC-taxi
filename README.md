@@ -17,3 +17,5 @@ Data Warehouse: Kiên
 Link report:https://docs.google.com/document/d/1x_OtN-g_M4uhVbFck3hIFCr4fa2ndIRzgw0WtD4yFFg/edit?tab=t.0#heading=h.xv8dmjsbqpy0
 
 Link slide: https://www.canva.com/design/DAGU3Y4J1QU/1a4I3R-MRD1obWPC-2SudQ/edit?utm_content=DAGU3Y4J1QU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
+Link Q&A prep: https://docs.google.com/document/d/1hUUOvRXj5vxNwpdOK65ZR_2w3_ta6X8DcOl9u1Xho70/edit?usp=sharing
