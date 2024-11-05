@@ -1,4 +1,139 @@
 # Data-pipeline-NYC-taxi
+1.  **Clone the repository**:
+
+    ```bash
+    git clone https://github.com/trannhatnguyen2/NYC_Taxi_Data_Pipeline
+    ```
+
+2.  **Start all infrastructures**:
+
+    ```bash
+    make run_all
+    ```
+
+    This command will download the necessary Docker images, create containers, and start the services in detached mode.
+
+3.  **Setup environment**:
+
+    ```bash
+    conda create -n bigdata python==3.9
+    y
+    conda activate bigdata
+    pip install -r requirements.txt
+    ```
+
+    Activate your conda environment and install required packages
+
+4.  **Access the Services**:
+
+    - Postgres is accessible on the default port `5432`.
+    - Kafka Control Center is accessible at `http://localhost:9021`.
+    - Debezium is accessible at `http://localhost:8085`.
+    - MinIO is accessible at `http://localhost:9001`.
+    - Airflow is accessible at `http://localhost:8080`.
+
+5.  **Download Dataset**:
+    You can download and use this dataset in here: https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
+
+6.  **Download JAR files for Spark**:
+
+    ```bash
+    mkdir jars
+    cd jars
+    curl -O https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.262/aws-java-sdk-bundle-1.12.262.jar
+    curl -O https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.4/hadoop-aws-3.3.4.jar
+    curl -O https://repo1.maven.org/maven2/org/postgresql/postgresql/42.4.3/postgresql-42.4.3.jar
+    curl -O https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.2.1/spark-sql-kafka-0-10_2.12-3.2.1.jar
+    ```
+
+# 🔍 How to Guide
+
+## I. Batch Processing
+
+1.  **Push the data (parquet format) from local to `raw` bucket - Datalake (MinIO)**:
+
+```bash
+    python src/local_to_raw.py
+```
+
+<p align="center">
+<img src="./imgs/batch_1.png" width=100% height=100%>
+
+<p align="center">
+    Pushed the data to MinIO successfully
+</p>
+
+2. **Process the data from `raw` to `processed` bucket (MinIO)**:
+
+```bash
+    python src/raw_to_processed.py
+```
+
+<p align="center">
+<img src="./imgs/batch_2.png" width=100% height=100%>
+
+<p align="center">
+    Processed the data successfully
+</p>
+
+3. **Convert the data into Delta Lake format**:
+
+```bash
+    python src/processed_to_delta.py
+```
+
+<p align="center">
+<img src="./imgs/batch_3.png" width=100% height=100%>
+
+<p align="center">
+    Converted the data successfully
+</p>
+
+4. **Create schema `staging`, `production` and table `staging.nyc_taxi` in PostgreSQL**
+
+```bash
+   python utils/create_schema.py
+   python utils/create_table.py
+```
+
+5. **Execute Spark to read, process the data from Datalake (MinIO) and write to Staging Area**
+
+```bash
+   python batch_processing/datalake_to_dw.py
+```
+
+This command may take a little time to process.
+
+<p align="center">
+<img src="./imgs/batch_5.png" width=100% height=100%>
+
+<p align="center">
+    Queried the data after executing Spark
+</p>
+
+6. **Validate data in Staging Area**
+
+```bash
+   cd data_validation
+   great_expectations init
+   Y
+```
+
+Then, run the file `full_flow.ipynb`
+
+<p align="center">
+<img src="./imgs/batch_6.png" width=100% height=100%>
+
+<p align="center">
+    Validated the data using Great Expectations
+</p>
+
+7. **Use DBT to transform the data and create a star schema in the data warehouse**
+
+```bash
+   cd dbt_nyc
+```
+
 Allocation of tasks:
 
 Data streaming: Lam & Dũng
