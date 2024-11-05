@@ -66,10 +66,7 @@
     python src/raw_to_processed.py
 ```
 
-<p align="center">
-<img src="./imgs/batch_2.png" width=100% height=100%>
 
-<p align="center">
     Processed the data successfully
 </p>
 
@@ -79,11 +76,7 @@
     python src/processed_to_delta.py
 ```
 
-<p align="center">
-<img src="./imgs/batch_3.png" width=100% height=100%>
 
-<p align="center">
-    Converted the data successfully
 </p>
 
 4. **Create schema `staging`, `production` and table `staging.nyc_taxi` in PostgreSQL**
