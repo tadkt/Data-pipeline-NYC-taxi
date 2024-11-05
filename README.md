@@ -2,7 +2,7 @@
 1.  **Clone the repository**:
 
     ```bash
-    git clone https://github.com/trannhatnguyen2/NYC_Taxi_Data_Pipeline
+    git clone https://github.com/tadkt/Data-pipeline-NYC-taxi
     ```
 
 2.  **Start all infrastructures**:
@@ -56,10 +56,7 @@
     python src/local_to_raw.py
 ```
 
-<p align="center">
-<img src="./imgs/batch_1.png" width=100% height=100%>
 
-<p align="center">
     Pushed the data to MinIO successfully
 </p>
 
