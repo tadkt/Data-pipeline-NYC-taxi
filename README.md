@@ -57,7 +57,7 @@
 ```
 
 
-    Pushed the data to MinIO successfully
+
 </p>
 
 2. **Process the data from `raw` to `processed` bucket (MinIO)**:
@@ -67,7 +67,7 @@
 ```
 
 
-    Processed the data successfully
+
 </p>
 
 3. **Convert the data into Delta Lake format**:
@@ -94,11 +94,7 @@
 
 This command may take a little time to process.
 
-<p align="center">
-<img src="./imgs/batch_5.png" width=100% height=100%>
 
-<p align="center">
-    Queried the data after executing Spark
 </p>
 
 6. **Validate data in Staging Area**
@@ -111,11 +107,7 @@ This command may take a little time to process.
 
 Then, run the file `full_flow.ipynb`
 
-<p align="center">
-<img src="./imgs/batch_6.png" width=100% height=100%>
 
-<p align="center">
-    Validated the data using Great Expectations
 </p>
 
 7. **Use DBT to transform the data and create a star schema in the data warehouse**
